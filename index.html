@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <base href="/" />
+        
+        <link rel="stylesheet" href="/styles/site.css">
+        <script>
+            (() => {
+                let theme = localStorage.getItem('SelectedTheme')?.replaceAll('"', '')?.trim()?.toLowerCase() ?? '';
+                if (theme !== 'dark' && theme !== 'light') {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                document.documentElement.classList.add(theme);
+            })();
+        </script>
+
+        <!-- Primary Meta Tags -->
+        <title>Easy Convert</title>
+        <meta name="description" content="Easily convert between different units of measurement. Enter conversions in plain text without having to dig through long lists of units.">
+        <link href="manifest.webmanifest" rel="manifest" />
+        <link rel="canonical" href="https://easyconvert.joncorey.dev/">
+
+        <!-- Favicons -->
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+        <link rel="icon" type="image/svg+xml" sizes="all" href="/images/favicon.svg">
+
+        <!-- Apple Tags -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180.png">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
+
+        <!-- Open Graph Tags -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Easy Convert: Easily Convert Between Units">
+        <meta property="og:description" content="Easily convert between different units of measurement. Enter conversions in plain text without having to dig through long lists of units.">
+        <meta property="og:image" content="https://easyconvert.joncorey.dev/images/card.png">
+        <meta property="og:image:alt" content="Easy Convert: Easily Convert Between Units">
+        <meta property="og:url" content="https://easyconvert.joncorey.dev">
+
+        <!-- Twitter / X -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="Easy Convert: Easily Convert Between Units">
+        <meta property="twitter:description" content="Easily convert between different units of measurement. Enter conversions in plain text without having to dig through long lists of units.">
+        <meta property="twitter:image" content="https://easyconvert.joncorey.dev/images/card.png">
+        <meta property="twitter:image:alt" content="Easy Convert: Easily Convert Between Units">
+    </head>
+    <body>
+        <button type="button" id="theme-toggle" aria-label="Toggle theme">
+            <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+        </button>
+        <a id="repo-link" aria-label="GitHub Repository" href="https://github.com/Jon-Corey/EasyConvert" target="_blank" rel="noopener noreferrer">
+            <svg fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+            </svg>
+        </a>
+        <main>
+            <h1>Easy Convert</h1>
+            <input type="text" id="conversionInput" placeholder="Enter a conversion..." autocapitalize="off" autocomplete="off" autofocus />
+            <div id="result">
+                <div class="conversion-card">
+                    <div class="card-text">
+                        <strong>Welcome!</strong>
+                        <p>Get started by entering a conversion in the box above. We'll parse your input and show you the result.</p>
+                        <p>Example input:</p>
+                        <ul>
+                            <li><code>10f to c</code></li>
+                            <li><code>5 miles in km</code></li>
+                            <li><code>60 GB to Mebibytes</code></li>
+                            <li><code>1atm to psi</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <a href="https://joncorey.dev" target="_blank" rel="noopener noreferrer">&copy; JonCorey.Dev <span id="year">2025</span></a>
+        </footer>
+        <script type="module" src="/scripts/conversion.js"></script>
+        <script src="/scripts/app.js"></script>
+        <script>
+            navigator.serviceWorker?.register('/scripts/service-worker.js');
+        </script>
+    </body>
+</html>

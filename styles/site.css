@@ -1,0 +1,253 @@
+/* Root styles */
+
+:root, .dark {
+    --primary-color: #a259e6;
+    --primary-color-alt: #c179ff;
+
+    --bg-color: #2d193c;
+    --bg-color-alt: #1a1a2e;
+    --bg-gradient: linear-gradient(135deg, var(--bg-color), var(--bg-color-alt));
+
+    --secondary-bg-color: #222222;
+    --secondary-bg-color-alt: #333333;
+
+    --text-color: #d3d3d3;
+    --text-color-alt: #ffffff;
+
+    /* Based on: https://www.joshwcomeau.com/shadow-palette/ */
+    --shadow-color: 269deg 60% 6%;
+    --shadow:
+        0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
+        0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
+        2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
+        5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
+    --inner-shadow: inset 1px 2px 4px hsl(var(--shadow-color) / 0.36);
+
+    --border-color: #444444;
+    --border: 1px solid var(--border-color);
+
+    --border-radius: 0.5rem;
+
+    --content-width: 25rem;
+}
+
+.light {
+    --primary-color: #7c3aed;
+    --primary-color-alt: #6200ca;
+
+    --bg-color: #f3e8ff;
+    --bg-color-alt: #e0e7ff;
+
+    --secondary-bg-color: #fafafa;
+    --secondary-bg-color-alt: #ffffff;
+
+    --text-color: #2d193c;
+    --text-color-alt: #000000;
+
+    --shadow-color: 261deg 31% 60%;
+
+    --border-color: #cccccc;
+}
+
+html {
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--secondary-bg-color) var(--bg-gradient) no-repeat center center fixed;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+/* This is a workaround for a bug with PWAs on iOS where fixed background images/gradients are not the full height of the viewport. */
+/* This results in a weird patch of non-gradient background at the bottom of the viewport for pages that aren't longer than the device's viewport. */
+/* This workaround sets the gradient to vertical and sets the background color to the end color of the gradient. */
+/* This makes it so that you can't see the seam where the gradient ends and the static color begins. */
+@supports (-webkit-touch-callout: none) {
+    @media (display-mode: standalone) {
+        :root {
+            --bg-gradient: linear-gradient(180deg, var(--bg-color), var(--bg-color-alt));
+        }
+
+        html {
+            background: var(--bg-color-alt) var(--bg-gradient) no-repeat center center fixed;
+        }
+    }
+}
+
+body {
+    margin: 0;
+    padding-top: calc(1rem + env(safe-area-inset-top));
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    padding-left: calc(1rem + env(safe-area-inset-left));
+    padding-right: calc(1rem + env(safe-area-inset-right));
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    color: var(--primary-color);
+    text-underline-offset: 0.125rem;
+}
+
+a:hover {
+    color: var(--primary-color-alt);
+}
+
+@media (display-mode: standalone) {
+    html {
+        overscroll-behavior: none;
+    }
+}
+
+/* Floating buttons */
+
+#theme-toggle, #repo-link {
+    position: absolute;
+    top: calc(1rem + env(safe-area-inset-top));
+    z-index: 1000;
+    background: var(--secondary-bg-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    border: var(--border);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#theme-toggle {
+    right: calc(1rem + env(safe-area-inset-right));
+}
+
+#repo-link {
+    right: calc(4rem + env(safe-area-inset-right));
+}
+
+#theme-toggle:hover, #repo-link:hover {
+    background: var(--secondary-bg-color-alt);
+}
+
+#theme-toggle svg, #repo-link svg {
+    width: 100%;
+    height: 100%;
+}
+
+.dark .icon-dark {
+    display: none;
+}
+
+.light .icon-light {
+    display: none;
+}
+
+/* Main content */
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: max(3rem, 10vh);
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 100%;
+    max-width: var(--content-width);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    margin: 1.5rem 0;
+    background: var(--secondary-bg-color);
+    color: var(--text-color-alt);
+    border: var(--border);
+    box-shadow: var(--shadow), var(--inner-shadow);
+}
+
+input[type="text"]:focus {
+    outline: 2px solid var(--primary-color);
+}
+
+/* Footer */
+
+footer {
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 2rem;
+}
+
+footer a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* Conversion output */
+
+#result {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.conversion-card {
+    width: 100%;
+    max-width: var(--content-width);
+    padding: 1rem;
+    background: var(--secondary-bg-color);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-number {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.card-unit {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-top: 0.5rem;
+}
+
+.card-arrow {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin: 0.5rem;
+}
+
+.card-arrow svg {
+    width: 1em;
+    height: 1em;
+}
+
+.card-text {
+    grid-column: 1 / -1;
+}
