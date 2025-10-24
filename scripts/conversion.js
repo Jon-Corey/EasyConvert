@@ -237,29 +237,14 @@ function parseConversion(query) {
     // Get the display values
     value = shortenNumber(value);
 
-    let inputUnitDisplay = parseFloat(inputValue) === 1 ? inputUnitData.displayName : inputUnitData.pluralDisplayName;
-    if (inputPrefixData) {
-        if (inputUnitDisplay.toLowerCase().startsWith("square ")) {
-            inputUnitDisplay = "Square " + inputPrefixData.displayName + inputUnitDisplay.slice(7).toLowerCase();
-        } else if (inputUnitDisplay.toLowerCase().startsWith("cubic ")) {
-            inputUnitDisplay = "Cubic " + inputPrefixData.displayName + inputUnitDisplay.slice(6).toLowerCase();
-        } else {
-            inputUnitDisplay = inputPrefixData.displayName + inputUnitDisplay.toLowerCase();
-        }
-    }
-    let outputUnitDisplay = parseFloat(value) === 1 ? outputUnitData.displayName : outputUnitData.pluralDisplayName;
-    if (outputPrefixData) {
-        if (outputUnitDisplay.toLowerCase().startsWith("square ")) {
-            outputUnitDisplay = "Square " + outputPrefixData.displayName + outputUnitDisplay.slice(7).toLowerCase();
-        } else if (outputUnitDisplay.toLowerCase().startsWith("cubic ")) {
-            outputUnitDisplay = "Cubic " + outputPrefixData.displayName + outputUnitDisplay.slice(6).toLowerCase();
-        } else {
-            outputUnitDisplay = outputPrefixData.displayName + outputUnitDisplay.toLowerCase();
-        }
-    }
+    const inputIsPlural = parseFloat(inputValue) !== 1;
+    const inputUnitDisplayName = inputUnitData.getName(inputPrefixData?.displayName ?? "", inputIsPlural);
+
+    const outputIsPlural = parseFloat(value) !== 1;
+    const outputUnitDisplayName = outputUnitData.getName(outputPrefixData?.displayName ?? "", outputIsPlural);
 
     // Return the display values
-    return { inputValue, inputUnit: inputUnitDisplay, outputValue: value, outputUnit: outputUnitDisplay };
+    return { inputValue, inputUnit: inputUnitDisplayName, outputValue: value, outputUnit: outputUnitDisplayName };
 }
 
 /**
