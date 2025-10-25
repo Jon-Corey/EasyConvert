@@ -85,5 +85,14 @@
         <script>
             navigator.serviceWorker?.register('/scripts/service-worker.js');
         </script>
+
+        <script type="module">
+            // If URL doesn't contain the prod domain, run tests
+            if (!window.location.href.includes('easyconvert.joncorey.dev')) {
+                import('/scripts/tests.js').then(({runTests}) => {
+                    runTests();
+                });
+            }
+        </script>
     </body>
 </html>

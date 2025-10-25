@@ -112,7 +112,7 @@ function handleInput() {
  * @param {string} query - The conversion query string.
  * @returns {Object|null} - An object containing inputValue, inputUnit, outputValue, and outputUnit, or null if parsing fails.
  */
-function parseConversion(query) {
+export function parseConversion(query) {
     // Starts from the beginning of the string, matches any of the metric prefixes or their abbreviations, followed immediately by one or more non-whitespace characters that continue to the end of the string. Case insensitive.
     // First group is the prefix, second group is the unit.
     // Examples:
@@ -128,7 +128,7 @@ function parseConversion(query) {
     // "5 miles in km" -> ["5", "miles", "km"]
     // "60 GB to Mebibytes" -> ["60", "GB", "Mebibytes"]
     // "1atm to psi" -> ["1", "atm", "psi"]
-    const queryRegex = /^([\d.]+)\s*(\S.*?)\s+(?:to|in|into|as|>|=|->|=>|:)\s+(\S.*)$/i;
+    const queryRegex = /^(-?[\d]+\.?[\d]*)\s*(\S.*?)\s+(?:to|in|into|as|>|=|->|=>|:)\s+(\S.*)$/i;
 
     // Extract the input value, input unit, and output unit from the query
     const match = query.match(queryRegex);
@@ -138,64 +138,62 @@ function parseConversion(query) {
     const outputUnit = match[3];
 
     // Get the data for the input unit (kg, g, meter, etc.)
-    let inputUnits = findUnits(inputUnit);
-    let inputPrefix = null;
-    // If no units were found, check for metric prefixes (kilo, milli, etc.)
-    if (inputUnits.length === 0) {
-        if (inputUnit.toLowerCase().startsWith("square ")) {
-            const inputUnitMetricMatch = inputUnit.slice(7).match(metricRegex);
-            if (inputUnitMetricMatch) {
-                inputPrefix = inputUnitMetricMatch[1];
-                const baseUnit = "square " + inputUnitMetricMatch[2];
-                inputUnits = findUnits(baseUnit, true, "area");
-            }
-        } else if (inputUnit.toLowerCase().startsWith("cubic ")) {
-            const inputUnitMetricMatch = inputUnit.slice(6).match(metricRegex);
-            if (inputUnitMetricMatch) {
-                inputPrefix = inputUnitMetricMatch[1];
-                const baseUnit = "cubic " + inputUnitMetricMatch[2];
-                inputUnits = findUnits(baseUnit, true, "volume");
-            }
-        } else {
-            const inputUnitMetricMatch = inputUnit.match(metricRegex);
-            if (inputUnitMetricMatch) {
-                inputPrefix = inputUnitMetricMatch[1];
-                const baseUnit = inputUnitMetricMatch[2];
-                inputUnits = findUnits(baseUnit, true);
-            }
+    let inputUnits = findUnits(inputUnit).map(u => ({ prefix: null, unit: u }));
+
+    // Check for metric prefixes (kilo, milli, etc.)
+    if (inputUnit.toLowerCase().startsWith("square ")) {
+        const inputUnitMetricMatch = inputUnit.slice(7).match(metricRegex);
+        if (inputUnitMetricMatch) {
+            const inputPrefix = inputUnitMetricMatch[1];
+            const baseUnit = "square " + inputUnitMetricMatch[2];
+            inputUnits = inputUnits.concat(findUnits(baseUnit, true, "area").map(u => ({ prefix: inputPrefix, unit: u })));
+        }
+    } else if (inputUnit.toLowerCase().startsWith("cubic ")) {
+        const inputUnitMetricMatch = inputUnit.slice(6).match(metricRegex);
+        if (inputUnitMetricMatch) {
+            const inputPrefix = inputUnitMetricMatch[1];
+            const baseUnit = "cubic " + inputUnitMetricMatch[2];
+            inputUnits = inputUnits.concat(findUnits(baseUnit, true, "volume").map(u => ({ prefix: inputPrefix, unit: u })));
+        }
+    } else {
+        const inputUnitMetricMatch = inputUnit.match(metricRegex);
+        if (inputUnitMetricMatch) {
+            const inputPrefix = inputUnitMetricMatch[1];
+            const baseUnit = inputUnitMetricMatch[2];
+            inputUnits = inputUnits.concat(findUnits(baseUnit, true).map(u => ({ prefix: inputPrefix, unit: u })));
         }
     }
+
     // If still no units were found, return null
     if (inputUnits.length === 0) return null;
 
     // Get the data for the output unit (kg, g, meter, etc.)
-    let outputUnits = findUnits(outputUnit);
-    let outputPrefix = null;
-    // If no units were found, check for metric prefixes (kilo, milli, etc.)
-    if (outputUnits.length === 0) {
-        if (outputUnit.toLowerCase().startsWith("square ")) {
-            const outputUnitMetricMatch = outputUnit.slice(7).match(metricRegex);
-            if (outputUnitMetricMatch) {
-                outputPrefix = outputUnitMetricMatch[1];
-                const baseUnit = "square " + outputUnitMetricMatch[2];
-                outputUnits = findUnits(baseUnit, true, "area");
-            }
-        } else if (outputUnit.toLowerCase().startsWith("cubic ")) {
-            const outputUnitMetricMatch = outputUnit.slice(6).match(metricRegex);
-            if (outputUnitMetricMatch) {
-                outputPrefix = outputUnitMetricMatch[1];
-                const baseUnit = "cubic " + outputUnitMetricMatch[2];
-                outputUnits = findUnits(baseUnit, true, "volume");
-            }
-        } else {
-            const outputUnitMetricMatch = outputUnit.match(metricRegex);
-            if (outputUnitMetricMatch) {
-                outputPrefix = outputUnitMetricMatch[1];
-                const baseUnit = outputUnitMetricMatch[2];
-                outputUnits = findUnits(baseUnit, true);
-            }
+    let outputUnits = findUnits(outputUnit).map(u => ({ prefix: null, unit: u }));
+    
+    // Check for metric prefixes (kilo, milli, etc.)
+    if (outputUnit.toLowerCase().startsWith("square ")) {
+        const outputUnitMetricMatch = outputUnit.slice(7).match(metricRegex);
+        if (outputUnitMetricMatch) {
+            const outputPrefix = outputUnitMetricMatch[1];
+            const baseUnit = "square " + outputUnitMetricMatch[2];
+            outputUnits = outputUnits.concat(findUnits(baseUnit, true, "area").map(u => ({ prefix: outputPrefix, unit: u })));
+        }
+    } else if (outputUnit.toLowerCase().startsWith("cubic ")) {
+        const outputUnitMetricMatch = outputUnit.slice(6).match(metricRegex);
+        if (outputUnitMetricMatch) {
+            const outputPrefix = outputUnitMetricMatch[1];
+            const baseUnit = "cubic " + outputUnitMetricMatch[2];
+            outputUnits = outputUnits.concat(findUnits(baseUnit, true, "volume").map(u => ({ prefix: outputPrefix, unit: u })));
+        }
+    } else {
+        const outputUnitMetricMatch = outputUnit.match(metricRegex);
+        if (outputUnitMetricMatch) {
+            const outputPrefix = outputUnitMetricMatch[1];
+            const baseUnit = outputUnitMetricMatch[2];
+            outputUnits = outputUnits.concat(findUnits(baseUnit, true).map(u => ({ prefix: outputPrefix, unit: u })));
         }
     }
+
     // If still no units were found, return null
     if (outputUnits.length === 0) return null;
 
@@ -206,7 +204,7 @@ function parseConversion(query) {
     // This resolves overlap in unit names between different types (e.g. "f" can mean both Fahrenheit and Foot. We want to make sure we use the correct one based on the output unit.)
     for (const iu of inputUnits) {
         for (const ou of outputUnits) {
-            if (iu.type === ou.type) {
+            if (iu.unit.type === ou.unit.type) {
                 inputUnitData = iu;
                 outputUnitData = ou;
                 break;
@@ -215,33 +213,34 @@ function parseConversion(query) {
     }
     // If no matching types were found, return null
     if (!inputUnitData || !outputUnitData) return null;
-    if (inputUnitData.type !== outputUnitData.type) return null;
+    if (!inputUnitData.unit || !outputUnitData.unit) return null;
+    if (inputUnitData.unit.type !== outputUnitData.unit.type) return null;
     
     // Convert the value from the input unit to the output unit
     let value = 0;
     let inputPrefixData = null;
     let outputPrefixData = null;
-    if (inputPrefix) {
-        inputPrefixData = findMetricPrefix(inputPrefix);
-        value = inputUnitData.toBase(parseFloat(inputValue * inputPrefixData.value));
+    if (inputUnitData.prefix) {
+        inputPrefixData = findMetricPrefix(inputUnitData.prefix);
+        value = inputUnitData.unit.toBase(parseFloat(inputValue * inputPrefixData.value));
     } else {
-        value = inputUnitData.toBase(parseFloat(inputValue));
+        value = inputUnitData.unit.toBase(parseFloat(inputValue));
     }
-    if (outputPrefix) {
-        outputPrefixData = findMetricPrefix(outputPrefix);
-        value = outputUnitData.fromBase(value) / outputPrefixData.value;
+    if (outputUnitData.prefix) {
+        outputPrefixData = findMetricPrefix(outputUnitData.prefix);
+        value = outputUnitData.unit.fromBase(value) / outputPrefixData.value;
     } else {
-        value = outputUnitData.fromBase(value);
+        value = outputUnitData.unit.fromBase(value);
     }
 
     // Get the display values
     value = shortenNumber(value);
 
     const inputIsPlural = parseFloat(inputValue) !== 1;
-    const inputUnitDisplayName = inputUnitData.getName(inputPrefixData?.displayName ?? "", inputIsPlural);
+    const inputUnitDisplayName = inputUnitData.unit.getName(inputPrefixData?.displayName ?? "", inputIsPlural);
 
     const outputIsPlural = parseFloat(value) !== 1;
-    const outputUnitDisplayName = outputUnitData.getName(outputPrefixData?.displayName ?? "", outputIsPlural);
+    const outputUnitDisplayName = outputUnitData.unit.getName(outputPrefixData?.displayName ?? "", outputIsPlural);
 
     // Return the display values
     return { inputValue, inputUnit: inputUnitDisplayName, outputValue: value, outputUnit: outputUnitDisplayName };
@@ -254,7 +253,7 @@ function parseConversion(query) {
  * @param {string|null} type - The type of unit to filter to (e.g. length, weight, etc.). Null doesn't filter by type.
  * @returns {Array} - An array of matching unit objects.
  */
-function findUnits(unitName, isMetric = null, type = null) {
+export function findUnits(unitName, isMetric = null, type = null) {
     // Checks first for exact matches (case sensitive), then for case insensitive matches if none are found.
     // This allows for case sensitive units (e.g. "B" for byte vs "b" for bit) while still allowing for flexibility in user input.
     let foundUnits = units.filter(unit => unit.aliases.includes(unitName) && (isMetric === null || unit.metric === isMetric) && (type === null || unit.type === type));
@@ -269,7 +268,7 @@ function findUnits(unitName, isMetric = null, type = null) {
  * @param {string} prefixName - The name of the prefix to find.
  * @returns {Object|null} - The matching prefix object, or null if not found.
  */
-function findMetricPrefix(prefixName) {
+export function findMetricPrefix(prefixName) {
     // Checks first for exact matches (case sensitive), then for case insensitive matches if none are found.
     // This allows for case sensitive prefixes (e.g. "M" for mega vs "m" for milli) while still allowing for flexibility in user input.
     let foundPrefix = metricPrefixes.find(prefix => prefix.aliases.includes(prefixName));
@@ -286,7 +285,7 @@ function findMetricPrefix(prefixName) {
  * @param {number} number - The number to shorten.
  * @returns {string} - The shortened number as a string.
  */
-function shortenNumber(number) {
+export function shortenNumber(number) {
     if (Math.abs(number) >= 1e6 || (Math.abs(number) > 0 && Math.abs(number) < 1e-3)) {
         // Convert very big or very small numbers to scientific notation
         return number.toExponential(2);

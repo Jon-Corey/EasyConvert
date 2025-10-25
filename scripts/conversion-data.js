@@ -23,7 +23,7 @@ export const units = [
         fromBase: (c) => c * (9 / 5) + 32
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}kelvin${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}kelvin${plural ? 's' : ''}`),
         type: "temperature",
         metric: true,
         aliases: ["k", "kelvin", "kelvins"],
@@ -40,7 +40,7 @@ export const units = [
     },
     // Length units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}meter${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}meter${plural ? 's' : ''}`),
         type: "length",
         metric: true,
         aliases: ["m", "meter", "meters", "metre", "metres", "mtr", "mtrs"],
@@ -83,13 +83,13 @@ export const units = [
         getName: (prefix, plural) => `Nautical Mile${plural ? 's' : ''}`,
         type: "length",
         metric: false,
-        aliases: ["nmi", "nm", "nautical mile", "nautical miles"],
+        aliases: ["nmi", "nautical mile", "nautical miles"],
         toBase: (nmi) => nmi * 1852,
         fromBase: (m) => m / 1852
     },
     // Area units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`Square ${prefix}meter${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`Square ${prefix ?? ""}meter${plural ? 's' : ''}`),
         type: "area",
         metric: true,
         aliases: ["m²", "square meter", "square meters", "square metre", "square metres", "m2", "sqm", "sq m", "m^2"],
@@ -129,10 +129,10 @@ export const units = [
         fromBase: (m) => m / 2.58998811e6
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}hectare${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}hectare${plural ? 's' : ''}`),
         type: "area",
         metric: true,
-        aliases: ["ha", "hectare", "hectares"],
+        aliases: ["hectare", "hectares"],
         toBase: (ha) => ha * 1e4,
         fromBase: (m) => m / 1e4
     },
@@ -146,7 +146,7 @@ export const units = [
     },
     // Mass/Weight units
     {
-        getName: (prefix, plural) => `Gram${plural ? 's' : ''}`,
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}gram${plural ? 's' : ''}`),
         type: "mass",
         metric: true,
         aliases: ["g", "gram", "grams", "gm", "gms"],
@@ -178,7 +178,7 @@ export const units = [
         fromBase: (g) => g / 907184.74
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}tonne${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}tonne${plural ? 's' : ''}`),
         type: "mass",
         metric: true,
         aliases: ["tonne", "metric ton", "metric tons", "tonnes", "mt"],
@@ -195,7 +195,7 @@ export const units = [
     },
     // Volume units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}liter${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}liter${plural ? 's' : ''}`),
         type: "volume",
         metric: true,
         aliases: ["l", "liter", "liters", "litre", "litres", "ltr", "ltrs"],
@@ -203,7 +203,7 @@ export const units = [
         fromBase: (l) => l
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`Cubic ${prefix}meter${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`Cubic ${prefix ?? ""}meter${plural ? 's' : ''}`),
         type: "volume",
         metric: true,
         aliases: ["m³", "cubic meter", "cubic meters", "cubic metre", "cubic metres", "m3", "cu m", "cum", "m^3"],
@@ -302,7 +302,7 @@ export const units = [
         getName: (prefix, plural) => `Fluid Ounce${plural ? 's' : ''} (US)`,
         type: "volume",
         metric: false,
-        aliases: ["fl oz", "oz", "fluid ounce", "fluid ounces", "us fluid ounce", "us fluid ounces", "us fl oz", "floz"],
+        aliases: ["fl oz", "fluid ounce", "fluid ounces", "us fluid ounce", "us fluid ounces", "us fl oz", "floz"],
         toBase: (floz) => floz * 0.0295735,
         fromBase: (l) => l / 0.0295735
     },
@@ -348,7 +348,7 @@ export const units = [
     },
     // Time units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}second${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}second${plural ? 's' : ''}`),
         type: "time",
         metric: true,
         aliases: ["s", "sec", "second", "seconds"],
@@ -359,7 +359,7 @@ export const units = [
         getName: (prefix, plural) => `Minute${plural ? 's' : ''}`,
         type: "time",
         metric: false,
-        aliases: ["m", "min", "minute", "minutes"],
+        aliases: ["min", "minute", "minutes"],
         toBase: (min) => min * 60,
         fromBase: (s) => s / 60
     },
@@ -399,7 +399,7 @@ export const units = [
         getName: (prefix, plural) => `Decade${plural ? 's' : ''}`,
         type: "time",
         metric: false,
-        aliases: ["d", "decade", "decades"],
+        aliases: ["decade", "decades"],
         toBase: (decade) => decade * 3.154e8,
         fromBase: (s) => s / 3.154e8
     },
@@ -421,7 +421,7 @@ export const units = [
     },
     // Frequency units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}hertz`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}hertz`),
         type: "frequency",
         metric: true,
         aliases: ["hz", "h", "hertz"],
@@ -430,7 +430,7 @@ export const units = [
     },
     // Data units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}bit${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}bit${plural ? 's' : ''}`),
         type: "data",
         metric: true,
         aliases: ["b", "bit", "bits"],
@@ -438,7 +438,7 @@ export const units = [
         fromBase: (bit) => bit
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}byte${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}byte${plural ? 's' : ''}`),
         type: "data",
         metric: true,
         aliases: ["B", "byte", "bytes"],
@@ -447,7 +447,7 @@ export const units = [
     },
     // Speed units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}meter${plural ? 's' : ''} Per Second`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}meter${plural ? 's' : ''} Per Second`),
         type: "speed",
         metric: true,
         aliases: ["m/s", "meters per second"],
@@ -455,7 +455,7 @@ export const units = [
         fromBase: (mps) => mps
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}meter${plural ? 's' : ''} Per Hour`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}meter${plural ? 's' : ''} Per Hour`),
         type: "speed",
         metric: true,
         aliases: ["m/h", "meters per hour"],
@@ -505,7 +505,7 @@ export const units = [
     },
     // Torque units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}newton-Meter${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}newton-Meter${plural ? 's' : ''}`),
         type: "torque",
         metric: true,
         aliases: ["N·m", "Nm", "newton meter", "newton meters", "newton-meter", "newton-meters", "newton metre", "newton metres", "newton-metre", "newton-metres"],
@@ -522,7 +522,7 @@ export const units = [
     },
     // Pressure units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}pascal${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}pascal${plural ? 's' : ''}`),
         type: "pressure",
         metric: true,
         aliases: ["pa", "p", "pascal", "pascals"],
@@ -530,10 +530,10 @@ export const units = [
         fromBase: (pa) => pa
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}bar${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}bar${plural ? 's' : ''}`),
         type: "pressure",
         metric: true,
-        aliases: ["bar", "b", "bars"],
+        aliases: ["bar", "bars"],
         toBase: (bar) => bar * 100000,
         fromBase: (pa) => pa / 100000
     },
@@ -549,7 +549,7 @@ export const units = [
         getName: (prefix, plural) => `Atmosphere${plural ? 's' : ''}`,
         type: "pressure",
         metric: false,
-        aliases: ["atm", "a", "atms", "atmosphere", "atmospheres", "standard atmosphere", "standard atmospheres", "std atm", "std atms", "std atmosphere", "std atmospheres", "standard atm", "standard atms"],
+        aliases: ["atm", "atms", "atmosphere", "atmospheres", "standard atmosphere", "standard atmospheres", "std atm", "std atms", "std atmosphere", "std atmospheres", "standard atm", "standard atms"],
         toBase: (atm) => atm * 101325,
         fromBase: (pa) => pa / 101325
     },
@@ -557,7 +557,7 @@ export const units = [
         getName: (prefix, plural) => "Torr",
         type: "pressure",
         metric: false,
-        aliases: ["torr", "t"],
+        aliases: ["torr"],
         toBase: (torr) => torr * 133.322,
         fromBase: (pa) => pa / 133.322
     },
@@ -595,7 +595,7 @@ export const units = [
     },
     // Force units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}newton${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}newton${plural ? 's' : ''}`),
         type: "force",
         metric: true,
         aliases: ["n", "newton", "newtons"],
@@ -620,7 +620,7 @@ export const units = [
     },
     // Voltage units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}volt${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}volt${plural ? 's' : ''}`),
         type: "voltage",
         metric: true,
         aliases: ["v", "volt", "volts"],
@@ -629,7 +629,7 @@ export const units = [
     },
     // Current units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}amp${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}amp${plural ? 's' : ''}`),
         type: "current",
         metric: true,
         aliases: ["a", "amp", "ampere", "amperes", "amps"],
@@ -638,7 +638,7 @@ export const units = [
     },
     // Power units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}watt${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}watt${plural ? 's' : ''}`),
         type: "power",
         metric: true,
         aliases: ["w", "watt", "watts", "joule per second", "joules per second", "j/s"],
@@ -681,13 +681,13 @@ export const units = [
         getName: (prefix, plural) => plural ? "Pferdestärken" : "Pferdestärke",
         type: "power",
         metric: false,
-        aliases: ["ps", "pferdestärke", "pferdestärken", "metric horsepower", "metric hp"],
+        aliases: ["pferdestärke", "pferdestärken", "metric horsepower", "metric hp"],
         toBase: (ps) => ps * 735.49875,
         fromBase: (w) => w / 735.49875
     },
     // Energy units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}joule${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}joule${plural ? 's' : ''}`),
         type: "energy",
         metric: true,
         aliases: ["j", "joule", "joules"],
@@ -711,7 +711,7 @@ export const units = [
         fromBase: (j) => j / 4184
     },
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}watt-Hour${plural ? 's' : ''}`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}watt-Hour${plural ? 's' : ''}`),
         type: "energy",
         metric: true,
         aliases: ["wh", "watt hour", "watt hours", "watt-hour", "watt-hours"],
@@ -731,7 +731,7 @@ export const units = [
         getName: (prefix, plural) => `Radian${plural ? 's' : ''}`,
         type: "angle",
         metric: false,
-        aliases: ["d", "rad", "radian", "radians"],
+        aliases: ["r", "rad", "radian", "radians"],
         toBase: (rad) => rad * (180 / Math.PI),
         fromBase: (deg) => deg * (Math.PI / 180)
     },
@@ -761,7 +761,7 @@ export const units = [
     },
     // Acceleration units
     {
-        getName: (prefix, plural) => capitalizeEachWord(`${prefix}meter${plural ? 's' : ''} Per Second Squared`),
+        getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}meter${plural ? 's' : ''} Per Second Squared`),
         type: "acceleration",
         metric: true,
         aliases: ["m/s²", "m/s2", "m/s^2", "meter per second squared", "meters per second squared"],
@@ -877,5 +877,3 @@ export const metricPrefixes = [
 function capitalizeEachWord(string) {
     return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
-
-export default units;
