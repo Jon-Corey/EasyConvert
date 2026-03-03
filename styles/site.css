@@ -4,8 +4,8 @@
     --primary-color: #a259e6;
     --primary-color-alt: #c179ff;
 
-    --bg-color: #2d193c;
-    --bg-color-alt: #1a1a2e;
+    --bg-color: #1a1a1a;
+    --bg-color-alt: #121212;
     --bg-gradient: linear-gradient(135deg, var(--bg-color), var(--bg-color-alt));
 
     --secondary-bg-color: #222222;
@@ -15,7 +15,7 @@
     --text-color-alt: #ffffff;
 
     /* Based on: https://www.joshwcomeau.com/shadow-palette/ */
-    --shadow-color: 269deg 60% 6%;
+    --shadow-color: 0deg 0% 0%;
     --shadow:
         0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
         0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
