@@ -312,6 +312,24 @@ function testParseConversion() {
             expectedOutputUnitDisplayName: "Gigameters"
         },
         {
+            // Test metric prefix on cubic units
+            input: "1000 cubic millimeters to cubic centimeters",
+            shouldSucceed: true,
+            expectedInputValue: "1000",
+            expectedInputUnitDisplayName: "Cubic Millimeters",
+            expectedOutputValue: "1",
+            expectedOutputUnitDisplayName: "Cubic Centimeter"
+        },
+        {
+            // Test metric prefix on square units
+            input: "1 square kilometer to square meters",
+            shouldSucceed: true,
+            expectedInputValue: "1",
+            expectedInputUnitDisplayName: "Square Kilometer",
+            expectedOutputValue: "1.00e+6",
+            expectedOutputUnitDisplayName: "Square Meters"
+        },
+        {
             // Test missing output unit
             input: "100 feet in",
             shouldSucceed: false

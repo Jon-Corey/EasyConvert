@@ -1,6 +1,7 @@
 // getName: A function that takes a metric prefix (e.g. "Kilo", "Milli") and a boolean indicating if the unit should be pluralized, and returns the display name of the unit.
 // type: The type of unit (e.g. length, temperature, mass, volume, time, etc.). Used to make sure conversions are only done between compatible units.
 // metric: Boolean indicating if the unit should allow metric prefixes (e.g. kilometer is fine, but kilofoot isn't a thing).
+// prefixPower: Optional exponent applied to the metric prefix value (defaults to 1). Square units use 2 and cubic units use 3, since a prefix scales the length (1 km² = (1e3)² m²).
 // aliases: An array of strings that can be used to identify the unit. This includes common abbreviations and alternative names.
 // toBase: A function that converts a value from this unit to the base unit of its type.
 // fromBase: A function that converts a value from the base unit of its type to this unit.
@@ -92,6 +93,7 @@ export const units = [
         getName: (prefix, plural) => capitalizeEachWord(`Square ${prefix ?? ""}meter${plural ? 's' : ''}`),
         type: "area",
         metric: true,
+        prefixPower: 2,
         aliases: ["m²", "square meter", "square meters", "square metre", "square metres", "m2", "sqm", "sq m", "m^2"],
         toBase: (m2) => m2,
         fromBase: (m) => m
@@ -190,8 +192,8 @@ export const units = [
         type: "mass",
         metric: false,
         aliases: ["st", "s", "stone", "stones"],
-        toBase: (st) => st * 63500.0,
-        fromBase: (g) => g / 63500.0
+        toBase: (st) => st * 6350.29,
+        fromBase: (g) => g / 6350.29
     },
     // Volume units
     {
@@ -206,6 +208,7 @@ export const units = [
         getName: (prefix, plural) => capitalizeEachWord(`Cubic ${prefix ?? ""}meter${plural ? 's' : ''}`),
         type: "volume",
         metric: true,
+        prefixPower: 3,
         aliases: ["m³", "cubic meter", "cubic meters", "cubic metre", "cubic metres", "m3", "cu m", "cum", "m^3"],
         toBase: (m3) => m3 * 1000,
         fromBase: (l) => l / 1000
@@ -392,32 +395,32 @@ export const units = [
         type: "time",
         metric: false,
         aliases: ["y", "yr", "year", "years", "yrs"],
-        toBase: (yr) => yr * 3.154e7,
-        fromBase: (s) => s / 3.154e7
+        toBase: (yr) => yr * 31557600,
+        fromBase: (s) => s / 31557600
     },
     {
         getName: (prefix, plural) => `Decade${plural ? 's' : ''}`,
         type: "time",
         metric: false,
         aliases: ["decade", "decades"],
-        toBase: (decade) => decade * 3.154e8,
-        fromBase: (s) => s / 3.154e8
+        toBase: (decade) => decade * 315576000,
+        fromBase: (s) => s / 315576000
     },
     {
         getName: (prefix, plural) => `Century${plural ? 's' : ''}`,
         type: "time",
         metric: false,
         aliases: ["c", "century", "centuries"],
-        toBase: (century) => century * 3.154e9,
-        fromBase: (s) => s / 3.154e9
+        toBase: (century) => century * 3155760000,
+        fromBase: (s) => s / 3155760000
     },
     {
         getName: (prefix, plural) => plural ? 'Millennia' : 'Millennium',
         type: "time",
         metric: false,
         aliases: ["millennium", "millennia"],
-        toBase: (millennium) => millennium * 3.154e10,
-        fromBase: (s) => s / 3.154e10
+        toBase: (millennium) => millennium * 31557600000,
+        fromBase: (s) => s / 31557600000
     },
     // Frequency units
     {
@@ -508,7 +511,7 @@ export const units = [
         getName: (prefix, plural) => capitalizeEachWord(`${prefix ?? ""}newton-Meter${plural ? 's' : ''}`),
         type: "torque",
         metric: true,
-        aliases: ["N·m", "Nm", "newton meter", "newton meters", "newton-meter", "newton-meters", "newton metre", "newton metres", "newton-metre", "newton-metres"],
+        aliases: ["n·m", "nm", "newton meter", "newton meters", "newton-meter", "newton-meters", "newton metre", "newton metres", "newton-metre", "newton-metres"],
         toBase: (nm) => nm,
         fromBase: (nm) => nm
     },
@@ -516,7 +519,7 @@ export const units = [
         getName: (prefix, plural) => `Pound ${plural ? 'Feet' : 'Foot'}`,
         type: "torque",
         metric: false,
-        aliases: ["lb·ft", "lbf·ft", "pound-foot", "pound-feet"],
+        aliases: ["lbft", "lb-ft", "lb·ft", "lbf·ft", "pound-foot", "pound-feet", "pound foot", "pound feet", "foot pound", "foot pounds", "foot-pound", "foot-pounds"],
         toBase: (lbf) => lbf * 1.35582,
         fromBase: (nm) => nm / 1.35582
     },
@@ -581,7 +584,7 @@ export const units = [
         getName: (prefix, plural) => `Inch${plural ? 'es' : ''} of Water`,
         type: "pressure",
         metric: false,
-        aliases: ["inh2O", "in h2o", "inch of water", "inches of water", "h2o"],
+        aliases: ["inh2o", "in h2o", "inch of water", "inches of water", "h2o"],
         toBase: (inH2O) => inH2O * 249.08891,
         fromBase: (pa) => pa / 249.08891
     },
@@ -739,7 +742,7 @@ export const units = [
         getName: (prefix, plural) => `Gradian${plural ? 's' : ''}`,
         type: "angle",
         metric: false,
-        aliases: ["g", "grad", "gradians"],
+        aliases: ["g", "grad", "gradian", "gradians"],
         toBase: (grad) => grad * 0.9,
         fromBase: (deg) => deg / 0.9
     },
@@ -859,7 +862,7 @@ export const metricPrefixes = [
     },
     {
         displayName: "Micro",
-        aliases: ["micro", "μ"],
+        aliases: ["micro", "μ", "µ"],
         value: 1e-6
     },
     {

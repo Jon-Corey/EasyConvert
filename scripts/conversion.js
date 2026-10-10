@@ -222,13 +222,13 @@ export function parseConversion(query) {
     let outputPrefixData = null;
     if (inputUnitData.prefix) {
         inputPrefixData = findMetricPrefix(inputUnitData.prefix);
-        value = inputUnitData.unit.toBase(parseFloat(inputValue * inputPrefixData.value));
+        value = inputUnitData.unit.toBase(parseFloat(inputValue) * getPrefixFactor(inputPrefixData, inputUnitData.unit));
     } else {
         value = inputUnitData.unit.toBase(parseFloat(inputValue));
     }
     if (outputUnitData.prefix) {
         outputPrefixData = findMetricPrefix(outputUnitData.prefix);
-        value = outputUnitData.unit.fromBase(value) / outputPrefixData.value;
+        value = outputUnitData.unit.fromBase(value) / getPrefixFactor(outputPrefixData, outputUnitData.unit);
     } else {
         value = outputUnitData.unit.fromBase(value);
     }
@@ -244,6 +244,16 @@ export function parseConversion(query) {
 
     // Return the display values
     return { inputValue, inputUnit: inputUnitDisplayName, outputValue: value, outputUnit: outputUnitDisplayName };
+}
+
+/**
+ * Gets the multiplier a metric prefix applies to a unit. Square and cubic units raise the prefix to the 2nd and 3rd power.
+ * @param {Object} prefixData - The metric prefix object.
+ * @param {Object} unit - The unit the prefix is applied to.
+ * @returns {number} - The prefix multiplier.
+ */
+function getPrefixFactor(prefixData, unit) {
+    return prefixData.value ** (unit.prefixPower ?? 1);
 }
 
 /**
